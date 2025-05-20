@@ -128,8 +128,6 @@ img {
 @media (orientation: landscape) {
   .rotate-message {
     display: none; /* Oculta a mensagem no modo paisagem */
-    max-height: 80vh; /* Limita a altura do contêiner */
-    overflow-y: auto; 
   }
 
   body > .container {
