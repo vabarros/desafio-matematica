@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafio de Matemática</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>Desafio de Matemática</h1>
+
+    <!-- Adição -->
+    <section class="challenge-section">
+      <h2>Adição</h2>
+      <div class="equation">
+        <input id="add1" />
+        <span>+</span>
+        <input id="add2" />
+        <span>=</span>
+      </div>
+
+      <div class="partes">
+        <label for="dez1">Primeira Dezena</label>
+        <input id="dez1" autocomplete="off"/>
+        
+
+        <label for="uni1">Primeira Unidade</label>
+        <input id="uni1" autocomplete="off"/>
+
+        <label for="dez2">Segunda Dezena</label>
+        <input id="dez2" autocomplete="off"/>
+
+        <label for="uni2">Segunda Unidade</label>
+        <input id="uni2" autocomplete="off"/>
+      </div>
+
+      <div class="resultado">
+        <label for="sdez">Soma das Dezenas</label>
+        <input id="sdez" autocomplete="off"/>
+
+        <label for="suni">Soma das Unidades</label>
+        <input id="suni" autocomplete="off"/>
+
+        <span>=</span>
+        <input id="addResult" autocomplete="off"/>
+
+        <button id="validateAdd">Validar Soma</button>
+      </div>
+      <p id="message"></p>
+    </section>
+
+    <!-- Subtração -->
+    <section class="challenge-section">
+      <h2>Subtração</h2>
+      <div class="equation">
+        <input id="sub1" autocomplete="off"/>
+        <span>-</span>
+        <input id="sub2" autocomplete="off"/>
+        <span>=</span>
+      </div>
+
+      <div class="partes">
+        <label for="psub1">Primeiro Número</label>
+        <input id="psub1" autocomplete="off"/>
+
+        <label for="sdsub2">Segunda Dezena</label>
+        <input id="sdsub2" autocomplete="off"/>
+
+        <label for="susub2">Segunda Unidade</label>
+        <input id="susub2" autocomplete="off"/>
+      </div>
+
+      <div class="resultado">
+        <label for="rsdsub2">Resultado Dezena</label>
+        <input id="rsdsub2" autocomplete="off"/>
+
+        <label for="rsusub2">Unidade</label>
+        <input id="rsusub2" autocomplete="off"/>
+
+        <span>=</span>
+        <input id="subResult" autocomplete="off"/>
+
+        <button id="validateSub">Validar Subtração</button>
+      </div>
+
+      <p id="sMessage"></p>
+      <p id="subMessage"></p>
+    </section>
+
+    <button id="restartBtn" class="btn-restart">Reiniciar Desafio</button>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
