@@ -93,20 +93,20 @@ img {
 
 @media (max-width: 600px) {
   .container {
-    margin: 20px 10px;
-    padding: 15px;
+    margin: 10px;
+    padding: 10px;
   }
 
   input {
     width: 100%;
-    max-width: 100px;
+    max-width: none;
   }
 
   .equation,
   .partes,
   .resultado {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   button {
@@ -147,6 +147,8 @@ img {
 @media (orientation: landscape) {
   .rotate-message {
     display: none; /* Oculta a mensagem no modo paisagem */
+    max-height: 80vh; /* Limita a altura do contêiner */
+    overflow-y: auto; 
   }
 
   body > .container {
