@@ -1,389 +1,217 @@
+class ArithmeticChallenge {
+    constructor() {
+        this.score = 100;
+        this.totalQuestions = 5;
+        this.addCorrect = 0;
+        this.subCorrect = 0;
+        this.mode = 0;
 
-let score = 100;
-let addCorrect = 0;
-let subCorrect = 0;
-const totalQuestions = 5;
-const dez1 = document.getElementById("dez1");
-const uni1 = document.getElementById("uni1");
-const dez2 = document.getElementById("dez2");
-const uni2 = document.getElementById("uni2");
-const sdez = document.getElementById("sdez");
-const suni = document.getElementById("suni");
-const addResult = document.getElementById("addResult");
-let a = 0;
-let b = 0;
-let c = 0;
-let d = 0;
-const psub1 = document.getElementById("psub1");
-const sdsub2 = document.getElementById("sdsub2");
-const susub2 = document.getElementById("susub2");
-const rsdsub2 = document.getElementById("rsdsub2");
-const rsusub2 = document.getElementById("rsusub2");
-const subResult = document.getElementById("subResult");
-let mode = 0;
-function generateAddition() {
+        this.cacheElements();
+        this.bindEvents();
+        this.init();
+    }
 
-    do {
-        a = Math.floor(Math.random() * 90) + 10;
-        b = Math.floor(Math.random() * 90) + 10;
-    } while (a + b > 100);
-    document.getElementById("add1").value = a;
-    document.getElementById("add1").style.backgroundColor = "cornflowerblue";
-    document.getElementById("add2").value = b;
-    document.getElementById("add2").style.backgroundColor = "darkgoldenrod";
-    uni1.setAttribute('disabled', 'true');
-    dez2.setAttribute('disabled', 'true');
-    uni2.setAttribute('disabled', 'true');
-    sdez.setAttribute('disabled', 'true');
-    suni.setAttribute('disabled', 'true');
-    addResult.setAttribute('disabled', 'true');
-}
-///////Validation additional fields
-//Primeira dezena field
-dez1.addEventListener('input', function () {
-    if (dez1.value == Math.floor(a / 10) * 10) {
-        if (mode === 1) {
-            dez1.style.backgroundColor = "green";
-        }
-        uni1.removeAttribute('disabled');
-        uni1.focus();
-    } else {
-        if (mode === 1) {
-            dez1.style.backgroundColor = "red";
-        }
-        uni1.setAttribute('disabled', 'true');
-    }
-});
-//Primeira unidade field
-uni1.addEventListener('input', function () {
-    if (uni1.value == a % 10) {
-        if (mode === 1) {
-            uni1.style.backgroundColor = "green";
-        }
-        dez2.removeAttribute('disabled');
-        dez2.focus();
-    } else {
-        if (mode === 1) {
-            uni1.style.backgroundColor = "red";
-        }
-        dez2.setAttribute('disabled', 'true');
-    }
-});
-//Segunda dezena field
-dez2.addEventListener('input', function () {
-    if (dez2.value == Math.floor(b / 10) * 10) {
-        if (mode === 1) {
-            dez2.style.backgroundColor = "green";
-        }
-        uni2.removeAttribute('disabled');
-        uni2.focus();
-    } else {
-        if (mode === 1) {
-            dez2.style.backgroundColor = "red";
-        }
-        uni2.setAttribute('disabled', 'true');
-    }
-});
-//Segunda unidade field
-uni2.addEventListener('input', function () {
-    if (uni2.value == b % 10) {
-        if (mode === 1) {
-            uni2.style.backgroundColor = "green";
-        }
-        sdez.removeAttribute('disabled');
-        sdez.focus();
-    } else {
-        if (mode === 1) {
-            uni2.style.backgroundColor = "red";
-        }
-        sdez.setAttribute('disabled', 'true');
-    }
-});
-//Soma das dezenas field
-sdez.addEventListener('input', function () {
-    if (sdez.value == (parseInt(dez1.value) + parseInt(dez2.value))) {
-        if (mode === 1) {
-            sdez.style.backgroundColor = "green";
-        }
-        suni.removeAttribute('disabled');
-        suni.focus();
-    } else {
-        if (mode === 1) {
-            sdez.style.backgroundColor = "red";
-        }
-        suni.setAttribute('disabled', 'true');
-    }
-});
+    cacheElements() {
+        this.fields = {
+            dez1: document.getElementById("dez1"),
+            uni1: document.getElementById("uni1"),
+            dez2: document.getElementById("dez2"),
+            uni2: document.getElementById("uni2"),
+            sdez: document.getElementById("sdez"),
+            suni: document.getElementById("suni"),
+            addResult: document.getElementById("addResult"),
+            psub1: document.getElementById("psub1"),
+            sdsub2: document.getElementById("sdsub2"),
+            susub2: document.getElementById("susub2"),
+            rsdsub2: document.getElementById("rsdsub2"),
+            rsusub2: document.getElementById("rsusub2"),
+            subResult: document.getElementById("subResult")
+        };
 
-//Soma da unidades field
-suni.addEventListener('input', function () {
-    if (suni.value == (parseInt(uni1.value) + parseInt(uni2.value))) {
-        if (mode === 1) {
-            suni.style.backgroundColor = "green";
-        }
-        addResult.removeAttribute('disabled');
-        addResult.focus();
-        document.getElementById("validateAdd").disabled = false;
-    } else {
-        if (mode === 1) {
-            suni.style.backgroundColor = "red";
-        }
-        addResult.setAttribute('disabled', 'true');
-    }
-});
+        this.buttons = {
+            validateAdd: document.getElementById("validateAdd"),
+            validateSub: document.getElementById("validateSub"),
+            restartBtn: document.getElementById("restartBtn"),
+            easyBtn: document.getElementById("easyBtn"),
+            hardBtn: document.getElementById("hardBtn")
+        };
 
-//Validation subtraction fields
-function generateSubtraction() {
-    c = Math.floor(Math.random() * 90) + 10;
-    d = Math.floor(Math.random() * 90) + 10;
-    if (c < d) [c, d] = [d, c];
-    document.getElementById("sub1").value = c;
-    document.getElementById("sub2").value = d;
-    sdsub2.setAttribute('disabled', 'true');
-    susub2.setAttribute('disabled', 'true');
-    rsdsub2.setAttribute('disabled', 'true');
-    rsusub2.setAttribute('disabled', 'true');
-    subResult.setAttribute('disabled', 'true');
+        this.messages = {
+            message: document.getElementById("message"),
+            sMessage: document.getElementById("sMessage"),
+            subMessage: document.getElementById("subMessage")
+        };
+    }
 
-}
-//primeiro campo subtração
-psub1.addEventListener('input', function () {
-    if (psub1.value == c) {
-        if (mode === 1) {
-            psub1.style.backgroundColor = "green";
-        }
-        sdsub2.removeAttribute('disabled');
-        sdsub2.focus();
-    } else {
-        if (mode === 1) {
-            psub1.style.backgroundColor = "red";
-        }
-        sdsub2.setAttribute('disabled', 'true');
-    }
-});
-//dezena segundo campo subtração
-sdsub2.addEventListener('input', function () {
-    if (sdsub2.value == Math.floor(d / 10) * 10) {
-        if (mode === 1) {
-            sdsub2.style.backgroundColor = "green";
-        }
-        susub2.removeAttribute('disabled');
-        susub2.focus();
-    } else {
-        if (mode === 1) {
-            sdsub2.style.backgroundColor = "red";
-        }
-        susub2.setAttribute('disabled', 'true');
-    }
-});
+    bindEvents() {
+        this.buttons.validateAdd.onclick = this.validateAddition.bind(this);
+        this.buttons.validateSub.onclick = this.validateSubtraction.bind(this);
+        this.buttons.restartBtn.onclick = this.restart.bind(this);
+        this.buttons.easyBtn.onclick = this.setEasyMode.bind(this);
+        this.buttons.hardBtn.onclick = this.setHardMode.bind(this);
 
-//unidade segundo campo subtração
-susub2.addEventListener('input', function () {
-    if (susub2.value == d % 10) {
-        if (mode === 1) {
-            susub2.style.backgroundColor = "green";
-        }
-        rsdsub2.removeAttribute('disabled');
-        rsdsub2.focus();
-    } else {
-        if (mode === 1) {
-            susub2.style.backgroundColor = "red";
-        }
-        rsdsub2.setAttribute('disabled', 'true');
-    }
-});
-//resultado priemiro numero menos dezena
-rsdsub2.addEventListener('input', function () {
-    if (rsdsub2.value == c - Math.floor(d / 10) * 10) {
-        if (mode === 1) {
-            rsdsub2.style.backgroundColor = "green";
-        }
-        rsusub2.removeAttribute('disabled');
-        rsusub2.focus();
-    } else {
-        if (mode === 1) {
-            rsdsub2.style.backgroundColor = "red";
-        }
-        rsusub2.setAttribute('disabled', 'true');
-    }
-});
-//resultado unidade menos unidade
-rsusub2.addEventListener('input', function () {
-    if (rsusub2.value == d % 10) {
-        if (mode === 1) {
-            rsusub2.style.backgroundColor = "green";
-        }
-        subResult.removeAttribute('disabled');
-        subResult.focus();
-        document.getElementById("validateSub").disabled = false;
+        this.fields.dez1.addEventListener('input', () => this.validateInput(this.fields.dez1, Math.floor(this.a / 10) * 10, this.fields.uni1));
+        this.fields.uni1.addEventListener('input', () => this.validateInput(this.fields.uni1, this.a % 10, this.fields.dez2));
+        this.fields.dez2.addEventListener('input', () => this.validateInput(this.fields.dez2, Math.floor(this.b / 10) * 10, this.fields.uni2));
+        this.fields.uni2.addEventListener('input', () => this.validateInput(this.fields.uni2, this.b % 10, this.fields.sdez));
+        this.fields.sdez.addEventListener('input', () => this.validateInput(this.fields.sdez, parseInt(this.fields.dez1.value) + parseInt(this.fields.dez2.value), this.fields.suni));
+        this.fields.suni.addEventListener('input', () => this.validateInput(this.fields.suni, parseInt(this.fields.uni1.value) + parseInt(this.fields.uni2.value), this.fields.addResult, this.buttons.validateAdd));
 
-    } else {
-        if (mode === 1) {
-            rsusub2.style.backgroundColor = "red";
+        this.fields.psub1.addEventListener('input', () => this.validateInput(this.fields.psub1, this.c, this.fields.sdsub2));
+        this.fields.sdsub2.addEventListener('input', () => this.validateInput(this.fields.sdsub2, Math.floor(this.d / 10) * 10, this.fields.susub2));
+        this.fields.susub2.addEventListener('input', () => this.validateInput(this.fields.susub2, this.d % 10, this.fields.rsdsub2));
+        this.fields.rsdsub2.addEventListener('input', () => this.validateInput(this.fields.rsdsub2, this.c - Math.floor(this.d / 10) * 10, this.fields.rsusub2));
+        this.fields.rsusub2.addEventListener('input', () => this.validateInput(this.fields.rsusub2, this.d % 10, this.fields.subResult, this.buttons.validateSub));
+    }
+
+    init() {
+        this.generateAddition();
+        this.generateSubtraction();
+        this.messages.subMessage.textContent = "🧠 Resolva 5 contas de cada tipo";
+        this.buttons.restartBtn.style.display = "none";
+        this.buttons.validateAdd.disabled = true;
+        this.buttons.validateSub.disabled = true;
+        this.fields.dez1.setAttribute('disabled', 'true');
+        this.fields.psub1.setAttribute('disabled', 'true');
+    }
+
+    generateAddition() {
+        do {
+            this.a = Math.floor(Math.random() * 90) + 10;
+            this.b = Math.floor(Math.random() * 90) + 10;
+        } while (this.a + this.b > 100);
+
+        document.getElementById("add1").value = this.a;
+        document.getElementById("add2").value = this.b;
+
+        this.disableFields(["uni1", "dez2", "uni2", "sdez", "suni", "addResult"]);
+        this.setColor(["add1", "add2"], ["cornflowerblue", "darkgoldenrod"]);
+    }
+
+    generateSubtraction() {
+        this.c = Math.floor(Math.random() * 90) + 10;
+        this.d = Math.floor(Math.random() * 90) + 10;
+        if (this.c < this.d) [this.c, this.d] = [this.d, this.c];
+
+        document.getElementById("sub1").value = this.c;
+        document.getElementById("sub2").value = this.d;
+
+        this.disableFields(["sdsub2", "susub2", "rsdsub2", "rsusub2", "subResult"]);
+    }
+
+    validateInput(field, correctValue, nextField, enableBtn) {
+        const isValid = parseInt(field.value) === correctValue;
+        if (this.mode === 1) field.style.backgroundColor = isValid ? "green" : "red";
+
+        if (isValid) {
+            nextField?.removeAttribute('disabled');
+            nextField?.focus();
+            if (enableBtn) enableBtn.disabled = false;
+        } else {
+            nextField?.setAttribute('disabled', 'true');
         }
-        subResult.setAttribute('disabled', 'true');
     }
-});
 
-function checkIfCompleted() {
+    validateAddition() {
+        const userResult = parseInt(this.fields.addResult.value);
+        if (this.a + this.b === userResult) {
+            this.addCorrect++;
+            this.messages.message.innerText = `✅ Correto! Faltam ${this.totalQuestions - this.addCorrect} de soma.`;
+            this.clearFields(["dez1", "uni1", "dez2", "uni2", "sdez", "suni", "addResult"]);
+            this.buttons.validateAdd.disabled = true;
+            if (this.addCorrect < this.totalQuestions) this.generateAddition();
+        } else {
+            this.score = Math.max(this.score - 5, 0);
+            this.messages.message.innerText = "❌ Incorreto! Tente novamente.";
+        }
+        this.checkCompletion();
+    }
 
-    if (addCorrect >= totalQuestions) {
-        document.getElementById("message").innerHTML =
-            `<strong>🎉 Desafio de somar concluído com sucesso!</strong>`;
-        document.getElementById("validateAdd").disabled = true;
-        dez1.setAttribute('disabled', 'true');
-        uni1.setAttribute('disabled', 'true');
-        dez2.setAttribute('disabled', 'true');
-        uni2.setAttribute('disabled', 'true');
-        sdez.setAttribute('disabled', 'true');
-        suni.setAttribute('disabled', 'true');
-        addResult.setAttribute('disabled', 'true');
-        document.getElementById("validateAdd").disabled = true;
+    validateSubtraction() {
+        const userResult = parseInt(this.fields.subResult.value);
+        if (this.c - this.d === userResult) {
+            this.subCorrect++;
+            this.messages.sMessage.innerText = `✅ Correto! Faltam ${this.totalQuestions - this.subCorrect} de subtração.`;
+            this.clearFields(["psub1", "sdsub2", "susub2", "rsdsub2", "rsusub2", "subResult"]);
+            this.buttons.validateSub.disabled = true;
+            if (this.subCorrect < this.totalQuestions) this.generateSubtraction();
+        } else {
+            this.score = Math.max(this.score - 5, 0);
+            this.messages.sMessage.innerText = "❌ Incorreto! Tente novamente.";
+        }
+        this.checkCompletion();
     }
-    if (subCorrect >= totalQuestions) {
-        document.getElementById("sMessage").innerHTML =
-            `<strong>🎉 Desafio de subtração concluído com sucesso!</strong>`;
-        document.getElementById("validateSub").disabled = true;
-        psub1.setAttribute('disabled', 'true');
-        sdsub2.setAttribute('disabled', 'true');
-        susub2.setAttribute('disabled', 'true');
-        rsdsub2.setAttribute('disabled', 'true');
-        rsusub2.setAttribute('disabled', 'true');
-        subResult.setAttribute('disabled', 'true');
-        document.getElementById("validateSub").disabled = true;
+
+    checkCompletion() {
+        if (this.addCorrect >= this.totalQuestions) {
+            this.messages.message.innerHTML = `<strong>🎉 Desafio de somar concluído com sucesso!</strong>`;
+            this.disableFields(["dez1", "uni1", "dez2", "uni2", "sdez", "suni", "addResult"]);
+        }
+        if (this.subCorrect >= this.totalQuestions) {
+            this.messages.sMessage.innerHTML = `<strong>🎉 Desafio de subtração concluído com sucesso!</strong>`;
+            this.disableFields(["psub1", "sdsub2", "susub2", "rsdsub2", "rsusub2", "subResult"]);
+        }
+        if (this.addCorrect >= this.totalQuestions && this.subCorrect >= this.totalQuestions) {
+            this.messages.subMessage.innerHTML = `<strong>🎉 Desafio concluído com sucesso!</strong><br>Pontuação final: ${this.score}/100`;
+            this.buttons.restartBtn.style.display = "inline";
+            this.messages.message.innerText = "";
+            this.messages.sMessage.innerText = "";
+        }
     }
-    if (addCorrect >= totalQuestions && subCorrect >= totalQuestions) {
-        document.getElementById("subMessage").innerHTML =
-            `<strong>🎉 Desafio concluído com sucesso!</strong><br>Pontuação final: ${score}/100`;
-        document.getElementById("restartBtn").style.display = "inline";
-        document.getElementById("message").innerText = "";
-        document.getElementById("sMessage").innerText = "";
+
+    restart() {
+        this.score = 100;
+        this.addCorrect = 0;
+        this.subCorrect = 0;
+        this.messages.message.innerText = "";
+        this.messages.sMessage.innerText = "";
+        this.messages.subMessage.textContent = "🧠 Resolva 5 contas de cada tipo";
+        this.buttons.easyBtn.style.display = "inline";
+        this.buttons.hardBtn.style.display = "inline";
+        this.buttons.restartBtn.style.display = "none";
+
+        this.generateAddition();
+        this.generateSubtraction();
+
+        this.buttons.validateAdd.disabled = true;
+        this.buttons.validateSub.disabled = true;
+        this.fields.dez1.setAttribute('disabled', 'true');
+        this.fields.psub1.setAttribute('disabled', 'true');
+    }
+
+    setEasyMode() {
+        this.mode = 1;
+        this.buttons.easyBtn.style.backgroundColor = "green";
+        this.buttons.hardBtn.style.display = "none";
+        this.fields.dez1.removeAttribute('disabled');
+        this.fields.psub1.removeAttribute('disabled');
+    }
+
+    setHardMode() {
+        this.mode = 2;
+        this.buttons.hardBtn.style.backgroundColor = "green";
+        this.buttons.easyBtn.style.display = "none";
+        this.fields.dez1.removeAttribute('disabled');
+        this.fields.psub1.removeAttribute('disabled');
+    }
+
+    disableFields(ids) {
+        ids.forEach(id => document.getElementById(id).setAttribute('disabled', 'true'));
+    }
+
+    clearFields(ids) {
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            el.value = "";
+            el.style.backgroundColor = "";
+        });
+    }
+
+    setColor(ids, colors) {
+        ids.forEach((id, index) => {
+            document.getElementById(id).style.backgroundColor = colors[index];
+        });
     }
 }
 
-//Validation for addition
-document.getElementById("validateAdd").onclick = function () {
-    const a = parseInt(document.getElementById("add1").value);
-    const b = parseInt(document.getElementById("add2").value);
-    const userResult = parseInt(document.getElementById("addResult").value);
-
-    if (a + b === userResult) {
-        addCorrect++;
-        document.getElementById("message").innerText = `✅ Correto! Faltam ${totalQuestions - addCorrect} de soma.`;
-        document.getElementById("addResult").value = "";
-        document.getElementById("dez1").value = "";
-        document.getElementById("dez1").style.backgroundColor = "";
-        document.getElementById("uni1").value = "";
-        document.getElementById("uni1").style.backgroundColor = "";
-        document.getElementById("dez2").value = "";
-        document.getElementById("dez2").style.backgroundColor = "";
-        document.getElementById("uni2").value = "";
-        document.getElementById("uni2").style.backgroundColor = "";
-        document.getElementById("sdez").value = "";
-        document.getElementById("sdez").style.backgroundColor = "";
-        document.getElementById("suni").value = "";
-        document.getElementById("suni").style.backgroundColor = "";
-        document.getElementById("dez1").focus();
-        document.getElementById("validateAdd").disabled = true;
-        if (addCorrect < totalQuestions) generateAddition();
-    } else {
-        score = Math.max(score - 5, 0);
-        document.getElementById("message").innerText = "❌ Incorreto! Tente novamente.";
-        document.getElementById("validateAdd").disabled = false;
-    }
-    checkIfCompleted();
-};
-
-//Validation for subtraction
-document.getElementById("validateSub").onclick = function () {
-    const a = parseInt(document.getElementById("sub1").value);
-    const b = parseInt(document.getElementById("sub2").value);
-    const userResult = parseInt(document.getElementById("subResult").value);
-
-    if (a - b === userResult) {
-        subCorrect++;
-        document.getElementById("sMessage").innerText = `✅ Correto! Faltam ${totalQuestions - subCorrect} de subtração.`;
-        document.getElementById("subResult").value = "";
-        document.getElementById("psub1").value = "";
-        document.getElementById("psub1").style.backgroundColor = "";
-        document.getElementById("sdsub2").value = "";
-        document.getElementById("sdsub2").style.backgroundColor = "";
-        document.getElementById("susub2").value = "";
-        document.getElementById("susub2").style.backgroundColor = "";
-        document.getElementById("rsdsub2").value = "";
-        document.getElementById("rsdsub2").style.backgroundColor = "";
-        document.getElementById("susub2").value = "";
-        document.getElementById("susub2").style.backgroundColor = "";
-        document.getElementById("rsusub2").value = "";
-        document.getElementById("rsusub2").style.backgroundColor = "";
-        document.getElementById("psub1").focus();
-        document.getElementById("validateSub").disabled = true;
-
-        if (subCorrect < totalQuestions) generateSubtraction();
-    } else {
-        score = Math.max(score - 5, 0);
-        document.getElementById("sMessage").innerText = "❌ Incorreto! Tente novamente.";
-        document.getElementById("validateSub").disabled = false;
-    }
-    checkIfCompleted();
-};
-
-//Button to restart the game
-//Restart the game
-document.getElementById("restartBtn").onclick = function () {
-    score = 100;
-    addCorrect = 0;
-    subCorrect = 0;
-
-    document.getElementById("validateAdd").disabled = false;
-    document.getElementById("validateSub").disabled = false;
-    document.getElementById("message").innerText = "";
-    document.getElementById("sMessage").innerText = "";
-    document.getElementById("easyBtn").style.display = "inline";
-    document.getElementById("easyBtn").style.backgroundColor = "cornflowerblue";
-    document.getElementById("hardBtn").style.backgroundColor = "cornflowerblue";
-    document.getElementById("hardBtn").style.display = "inline";
-
-    document.getElementById("subMessage").textContent = "🧠 Resolva 5 contas de cada tipo";
-
-    generateAddition();
-    generateSubtraction();
-};
-
-
-// Botão Easy
-document.getElementById("easyBtn").onclick = function () {
-    // Define cores para o modo Easy
-    document.getElementById("hardBtn").style.display = "none";
-    document.getElementById("easyBtn").style.backgroundColor = "green";
-    dez1.removeAttribute('disabled');
-    psub1.removeAttribute('disabled');
-    mode = 1;
-};
-
-// Botão Hard
-document.getElementById("hardBtn").onclick = function () {
-    // Define cores para o modo Hard
-    document.getElementById("hardBtn").style.backgroundColor = "green";
-    document.getElementById("easyBtn").style.display = "none";
-    dez1.removeAttribute('disabled');
-    psub1.removeAttribute('disabled');
-    mode = 2;
-};
-
-
-//Button to show the answer
-window.onload = function () {
-
-    // Inicializar com os primeiros desafios
-    generateAddition();
-    generateSubtraction();
-    document.getElementById("subMessage").textContent = "🧠 Resolva 5 contas de cada tipo";
-    document.getElementById("restartBtn").style.display = "none";
-    document.getElementById("validateAdd").disabled = true;
-    document.getElementById("validateSub").disabled = true;
-    dez1.setAttribute('disabled', 'true');
-    psub1.setAttribute('disabled', 'true');
-}
-
-
+window.onload = () => new ArithmeticChallenge();
