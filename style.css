@@ -125,26 +125,32 @@ img {
 }
 
 @media (orientation: portrait) {
-  body {
-    display: none; /* Oculta o conteúdo no modo retrato */
+  body > .container {
+    display: none; /* Oculta o conteúdo principal no modo retrato */
   }
 
   .rotate-message {
-    display: block;
+    display: block; /* Exibe a mensagem no modo retrato */
     text-align: center;
     font-size: 18px;
     color: #333;
     margin-top: 50px;
+    padding: 20px;
+    background-color: #f2f5f9;
+    height: 100vh; /* Garante que a mensagem ocupe a tela inteira */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
 @media (orientation: landscape) {
-  body {
-    display: block; /* Exibe o conteúdo no modo paisagem */
-  }
-
   .rotate-message {
     display: none; /* Oculta a mensagem no modo paisagem */
+  }
+
+  body > .container {
+    display: block; /* Exibe o conteúdo principal no modo paisagem */
   }
 }
 
