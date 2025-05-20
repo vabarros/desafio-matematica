@@ -122,7 +122,18 @@ img {
   span {
     font-size: 30px;
   }
-
+  input[type="number"],
+  input[inputmode="numeric"] {
+    -moz-appearance: textfield;
+    /* Remove setas no Firefox */
+  }
+  
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    /* Remove setas no Chrome */
+    margin: 0;
+  }
 }
 input[type="number"],
 input[inputmode="numeric"] {
