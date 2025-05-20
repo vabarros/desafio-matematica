@@ -124,25 +124,6 @@ img {
   }
 }
 
-@media (orientation: portrait) {
-  body > .container {
-    display: none; /* Oculta o conteúdo principal no modo retrato */
-  }
-
-  .rotate-message {
-    display: block; /* Exibe a mensagem no modo retrato */
-    text-align: center;
-    font-size: 18px;
-    color: #333;
-    margin-top: 50px;
-    padding: 20px;
-    background-color: #f2f5f9;
-    height: 100vh; /* Garante que a mensagem ocupe a tela inteira */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
 
 @media (orientation: landscape) {
   .rotate-message {
