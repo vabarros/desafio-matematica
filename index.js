@@ -4,7 +4,7 @@ class ArithmeticChallenge {
         this.totalQuestions = 5;
         this.addCorrect = 0;
         this.subCorrect = 0;
-        this.mode = 0;
+        this.mode;
 
         this.cacheElements();
         this.bindEvents();
@@ -101,7 +101,7 @@ class ArithmeticChallenge {
 
     validateInput(field, correctValue, nextField, enableBtn) {
         const isValid = parseInt(field.value) === correctValue;
-        if (this.mode === 1) field.style.backgroundColor = isValid ? "green" : "red";
+        if (this.mode === easy) field.style.backgroundColor = isValid ? "green" : "red";
 
         if (isValid) {
             nextField?.removeAttribute('disabled');
@@ -180,17 +180,24 @@ class ArithmeticChallenge {
     }
 
     setEasyMode() {
-        this.mode = 1;
+        this.mode = "easy";
         this.buttons.easyBtn.style.backgroundColor = "green";
-        this.buttons.hardBtn.style.display = "none";
+        this.buttons.hardBtn.style.backgroundColor = "blue";
+        this.buttons.easyBtn.disabled = true;
+        this.buttons.hardBtn.disabled = false;
+        
         this.fields.dez1.removeAttribute('disabled');
         this.fields.psub1.removeAttribute('disabled');
     }
 
     setHardMode() {
-        this.mode = 2;
+        this.mode = "hard";
         this.buttons.hardBtn.style.backgroundColor = "green";
-        this.buttons.easyBtn.style.display = "none";
+        this.buttons.easyBtn.style.backgroundColor = "blue";
+        this.buttons.hardBtn.disabled = true;
+        this.buttons.easyBtn.disabled = false;
+        
+        this.buttons.hardBtn.style.backgroundColor = "green";
         this.fields.dez1.removeAttribute('disabled');
         this.fields.psub1.removeAttribute('disabled');
     }
