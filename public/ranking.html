@@ -3,128 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ranking dos Jogadores</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <title>Ranking de Jogadores</title>
   <style>
     body {
-      background-color: #fef6e4;
-      font-family: 'Fredoka', sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f1f5f9;
+      padding: 20px;
+      text-align: center;
     }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem 1rem;
-    }
-
     h1 {
-      text-align: center;
-      color: #4a4e69;
-      font-size: 2rem;
+      color: #2563eb;
     }
-
-    .ranking-table {
-      width: 100%;
+    table {
+      margin: 0 auto;
       border-collapse: collapse;
-      margin-top: 2rem;
+      width: 90%;
+      max-width: 500px;
     }
-
-    .ranking-table th,
-    .ranking-table td {
+    th, td {
+      border: 1px solid #ccc;
       padding: 12px;
-      text-align: center;
-      border-bottom: 2px solid #eee;
       font-size: 1.1rem;
     }
-
-    .ranking-table th {
-      background-color: #fcd5ce;
-      color: #4a4e69;
-    }
-
-    .ranking-table tr:nth-child(1) {
-      background-color: #ffe066;
-      font-weight: bold;
-    }
-
-    .ranking-table tr:nth-child(2) {
-      background-color: #ffd93d;
-    }
-
-    .ranking-table tr:nth-child(3) {
-      background-color: #ffb347;
-    }
-
-    .btn-voltar {
-      display: block;
-      margin: 2rem auto;
-      background-color: #f28482;
+    th {
+      background-color: #3b82f6;
       color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
     }
-
-    @media (max-width: 600px) {
-      .ranking-table th, .ranking-table td {
-        font-size: 0.9rem;
-      }
+    tr:nth-child(even) {
+      background-color: #e2e8f0;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🏆 Ranking dos Jogadores</h1>
-    <table class="ranking-table" id="rankingTable">
-      <thead>
-        <tr>
-          <th>Posição</th>
-          <th>Nome</th>
-          <th>Pontuação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Pontuações serão inseridas aqui pelo JS -->
-      </tbody>
-    </table>
+  <h1>🏆 Ranking dos Jogadores</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Posição</th>
+        <th>Nome</th>
+        <th>Pontos</th>
+      </tr>
+    </thead>
+    <tbody id="ranking-body">
+      <tr><td colspan="3">Carregando...</td></tr>
+    </tbody>
+  </table>
+  <button onclick="window.location.href='login.html'">Voltar</button>
 
-    <button class="btn-voltar" onclick="window.location.href='index.html'">Voltar ao Início</button>
-  </div>
+  <script type="module">
+    import { Fireproof } from 'https://cdn.skypack.dev/@fireproof/core';
 
-  <script>
-    // Exemplo de dados simulados - depois substitua por localStorage ou backend
-    const rankingData = JSON.parse(localStorage.getItem("rankingData")) || [
-      { nome: "Lucas", pontos: 120 },
-      { nome: "Ana", pontos: 110 },
-      { nome: "João", pontos: 100 },
-      { nome: "Clara", pontos: 95 },
-      { nome: "Miguel", pontos: 90 },
-      { nome: "Julia", pontos: 88 },
-      { nome: "Rafa", pontos: 85 },
-      { nome: "Tiago", pontos: 80 },
-      { nome: "Marina", pontos: 78 },
-      { nome: "Lara", pontos: 75 },
-    ];
+    const db = Fireproof('ranking');
 
-    const tableBody = document.querySelector("#rankingTable tbody");
+    async function carregarRanking() {
+      const result = await db.query(doc => doc.pontos);
+      const dados = result.rows.map(r => r.value);
 
-    rankingData.sort((a, b) => b.pontos - a.pontos);
+      const top10 = dados
+        .sort((a, b) => b.pontos - a.pontos)
+        .slice(0, 10);
 
-    rankingData.slice(0, 10).forEach((jogador, index) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${index + 1}º</td>
-        <td>${jogador.nome}</td>
-        <td>${jogador.pontos}</td>
-      `;
-      tableBody.appendChild(row);
-    });
+      const tbody = document.getElementById('ranking-body');
+      tbody.innerHTML = '';
+
+      top10.forEach((jogador, i) => {
+        const row = `<tr>
+          <td>${i + 1}º</td>
+          <td>${jogador.nome}</td>
+          <td>${jogador.pontos}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      if (top10.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3">Nenhuma pontuação registrada ainda.</td></tr>';
+      }
+    }
+
+    carregarRanking();
   </script>
 </body>
 </html>

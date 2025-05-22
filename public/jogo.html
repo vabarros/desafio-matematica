@@ -111,5 +111,23 @@
   </div>
 
   <script src="jogo.js"></script>
+  <script type="module">
+  import { Fireproof } from 'https://cdn.skypack.dev/@fireproof/core';
+
+  const db = Fireproof('ranking');
+
+  async function salvarPontuacao(nome, pontos) {
+    await db.put({
+      _id: crypto.randomUUID(), // ID único
+      nome,
+      pontos,
+      data: Date.now()
+    });
+  }
+
+  // Exemplo de uso após o jogo:
+  // salvarPontuacao('Ana', 100);
+</script>
+
 </body>
 </html>
