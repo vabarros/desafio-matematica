@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Entrar no Jogo</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to right, #f9d423, #ff4e50);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background-color: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #ff4e50;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #f9d423;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #loginMessage {
+      margin-top: 15px;
+      color: red;
+      font-weight: bold;
+      min-height: 24px;
+    }
+  </style>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Substitua pelos seus dados do Supabase
+    const supabaseUrl = "https://wpvntetbcdbgufxtjatj.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4";
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function entrar() {
+      const nome = document.getElementById('nome').value.trim();
+      const apelido = document.getElementById('apelido').value.trim();
+      const msg = document.getElementById('loginMessage');
+
+      msg.textContent = "";
+
+      if (!nome || !apelido) {
+        msg.textContent = 'Preencha nome e apelido!';
+        return;
+      }
+
+      try {
+        // Verifica se já existe usuário com mesmo nome + apelido
+        let { data: usuarios, error } = await supabaseClient
+          .from('usuarios')
+          .select('*')
+          .eq('nome', nome)
+          .eq('apelido', apelido)
+          .limit(1);
+
+        if (error) throw error;
+
+        let usuarioId;
+
+        if (usuarios && usuarios.length > 0) {
+          // Já existe: usar o existente
+          usuarioId = usuarios[0].id;
+        } else {
+          // Novo usuário: inserir
+          const { data, error: insertError } = await supabaseClient
+            .from('usuarios')
+            .insert([{ nome, apelido }])
+            .select()
+            .single();
+
+          if (insertError) throw insertError;
+          usuarioId = data.id;
+        }
+
+        // Salvar no localStorage e redirecionar
+        localStorage.setItem('usuarioId', usuarioId);
+        localStorage.setItem('nome', nome);
+        localStorage.setItem('apelido', apelido);
+        window.location.href = 'jogo.html';
+
+      } catch (err) {
+        console.error(err);
+        msg.textContent = 'Erro ao entrar ou conectar com o banco.';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Vamos jogar!</h1>
+    <input type="text" id="nome" placeholder="Seu nome..." autofocus />
+    <input type="text" id="apelido" placeholder="Seu apelido..." />
+    <button onclick="entrar()">Entrar</button>
+    <button onclick="window.location.href='ranking.html'">Ver Ranking</button>
+    <p id="loginMessage"></p>
+  </div>
+</body>
+</html>

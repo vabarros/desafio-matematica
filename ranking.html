@@ -43,6 +43,14 @@
       cursor: pointer;
     }
   </style>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const supabaseUrl = 'https://wpvntetbcdbgufxtjatj.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  </script>
 </head>
 <body>
   <h1>🏆 Ranking dos Jogadores</h1>
@@ -58,35 +66,40 @@
       <tr><td colspan="3">Carregando...</td></tr>
     </tbody>
   </table>
-  <button onclick="window.location.href='login.html'">Voltar</button>
+  <button onclick="window.location.href='index.html'">Voltar</button>
 
-  <script type="module">
-    import { Fireproof } from 'https://cdn.skypack.dev/@fireproof/core';
-
-    const db = Fireproof('ranking');
-
+  <script>
     async function carregarRanking() {
-      const result = await db.query(doc => doc.pontos);
-      const dados = result.rows.map(r => r.value);
-
-      const top10 = dados
-        .sort((a, b) => b.pontos - a.pontos)
-        .slice(0, 10);
-
       const tbody = document.getElementById('ranking-body');
-      tbody.innerHTML = '';
+      tbody.innerHTML = '<tr><td colspan="3">Carregando...</td></tr>';
 
-      top10.forEach((jogador, i) => {
-        const row = `<tr>
-          <td>${i + 1}º</td>
-          <td>${jogador.nome}</td>
-          <td>${jogador.pontos}</td>
-        </tr>`;
-        tbody.innerHTML += row;
-      });
+      try {
+        const { data, error } = await supabase
+          .from('pontuacao')
+          .select('nome, pontos')
+          .order('pontos', { ascending: false })
+          .limit(10);
 
-      if (top10.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3">Nenhuma pontuação registrada ainda.</td></tr>';
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3">Nenhuma pontuação registrada ainda.</td></tr>';
+          return;
+        }
+
+        data.forEach((jogador, i) => {
+          const row = `<tr>
+            <td>${i + 1}º</td>
+            <td>${jogador.nome}</td>
+            <td>${jogador.pontos}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="3">Erro ao carregar ranking.</td></tr>';
       }
     }
 

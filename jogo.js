@@ -1,10 +1,15 @@
+// Configuração Supabase (substitua com a sua chave real)
+const supabaseUrl = "https://wpvntetbcdbgufxtjatj.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4SUA_SUPABASE_KEY_AQUI"; // Substitua pela sua chave anônima correta
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 class ArithmeticChallenge {
     constructor() {
         this.score = 100;
         this.totalQuestions = 5;
         this.addCorrect = 0;
         this.subCorrect = 0;
-        this.mode;
+        this.mode = 0;
 
         this.cacheElements();
         this.bindEvents();
@@ -101,7 +106,7 @@ class ArithmeticChallenge {
 
     validateInput(field, correctValue, nextField, enableBtn) {
         const isValid = parseInt(field.value) === correctValue;
-        if (this.mode === "easy") field.style.backgroundColor = isValid ? "green" : "red";
+        if (this.mode === 1) field.style.backgroundColor = isValid ? "green" : "red";
 
         if (isValid) {
             nextField?.removeAttribute('disabled');
@@ -219,6 +224,7 @@ class ArithmeticChallenge {
             document.getElementById(id).style.backgroundColor = colors[index];
         });
     }
+    
 }
 function salvarRanking(nomeJogador, pontos) {
   let ranking = JSON.parse(localStorage.getItem("rankingData")) || [];
@@ -226,6 +232,5 @@ function salvarRanking(nomeJogador, pontos) {
   localStorage.setItem("rankingData", JSON.stringify(ranking));
 }
 
-
+// Inicializa o jogo quando a página é carregada 
 window.onload = () => new ArithmeticChallenge();
-
