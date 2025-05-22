@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ranking dos Jogadores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #fef6e4;
+      font-family: 'Fredoka', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a4e69;
+      font-size: 2rem;
+    }
+
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    .ranking-table th,
+    .ranking-table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 2px solid #eee;
+      font-size: 1.1rem;
+    }
+
+    .ranking-table th {
+      background-color: #fcd5ce;
+      color: #4a4e69;
+    }
+
+    .ranking-table tr:nth-child(1) {
+      background-color: #ffe066;
+      font-weight: bold;
+    }
+
+    .ranking-table tr:nth-child(2) {
+      background-color: #ffd93d;
+    }
+
+    .ranking-table tr:nth-child(3) {
+      background-color: #ffb347;
+    }
+
+    .btn-voltar {
+      display: block;
+      margin: 2rem auto;
+      background-color: #f28482;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .ranking-table th, .ranking-table td {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏆 Ranking dos Jogadores</h1>
+    <table class="ranking-table" id="rankingTable">
+      <thead>
+        <tr>
+          <th>Posição</th>
+          <th>Nome</th>
+          <th>Pontuação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Pontuações serão inseridas aqui pelo JS -->
+      </tbody>
+    </table>
+
+    <button class="btn-voltar" onclick="window.location.href='index.html'">Voltar ao Início</button>
+  </div>
+
+  <script>
+    // Exemplo de dados simulados - depois substitua por localStorage ou backend
+    const rankingData = JSON.parse(localStorage.getItem("rankingData")) || [
+      { nome: "Lucas", pontos: 120 },
+      { nome: "Ana", pontos: 110 },
+      { nome: "João", pontos: 100 },
+      { nome: "Clara", pontos: 95 },
+      { nome: "Miguel", pontos: 90 },
+      { nome: "Julia", pontos: 88 },
+      { nome: "Rafa", pontos: 85 },
+      { nome: "Tiago", pontos: 80 },
+      { nome: "Marina", pontos: 78 },
+      { nome: "Lara", pontos: 75 },
+    ];
+
+    const tableBody = document.querySelector("#rankingTable tbody");
+
+    rankingData.sort((a, b) => b.pontos - a.pontos);
+
+    rankingData.slice(0, 10).forEach((jogador, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}º</td>
+        <td>${jogador.nome}</td>
+        <td>${jogador.pontos}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  </script>
+</body>
+</html>

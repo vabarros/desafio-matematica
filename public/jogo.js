@@ -220,5 +220,12 @@ class ArithmeticChallenge {
         });
     }
 }
+function salvarRanking(nomeJogador, pontos) {
+  let ranking = JSON.parse(localStorage.getItem("rankingData")) || [];
+  ranking.push({ nome: nomeJogador, pontos });
+  localStorage.setItem("rankingData", JSON.stringify(ranking));
+}
+
 
 window.onload = () => new ArithmeticChallenge();
+
