@@ -101,7 +101,7 @@ class ArithmeticChallenge {
 
     validateInput(field, correctValue, nextField, enableBtn) {
         const isValid = parseInt(field.value) === correctValue;
-        if (this.mode === easy) field.style.backgroundColor = isValid ? "green" : "red";
+        if (this.mode === "easy") field.style.backgroundColor = isValid ? "green" : "red";
 
         if (isValid) {
             nextField?.removeAttribute('disabled');

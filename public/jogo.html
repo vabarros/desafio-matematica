@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Desafio de Matemática</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Desafio de Matemática</h1>
+
+    <div class="mode-buttons">
+      <button id="easyBtn">Modo fácil</button>
+      <button id="hardBtn">Modo difícil</button>
+    </div>
+
+    <!-- Seção de Adição -->
+    <section>
+      <h2>➕ Desafio de Soma</h2>
+
+      <div class="step">
+        <h3>Etapa 1: Separar dezenas e unidades</h3>
+        <div class="equation">
+          <input id="add1" type="number" disabled />
+          <span>+</span>
+          <input id="add2" type="number" disabled />
+          <span>=</span>
+        </div>
+        <div class="inputs">
+          <label>Dezena do primeiro:</label>
+          <input id="dez1" type="number" />
+          <label>Unidade do primeiro:</label>
+          <input id="uni1" type="number" />
+          <label>Dezena do segundo:</label>
+          <input id="dez2" type="number" />
+          <label>Unidade do segundo:</label>
+          <input id="uni2" type="number" />
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Etapa 2: Somar as partes</h3>
+        <div class="inputs">
+          <label>Soma das dezenas:</label>
+          <input id="sdez" type="number" />
+          <label>Soma das unidades:</label>
+          <input id="suni" type="number" />
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Etapa 3: Resultado final</h3>
+        <div class="inputs">
+          <label>Resultado final:</label>
+          <input id="addResult" type="number" />
+          <button id="validateAdd">Validar Soma</button>
+        </div>
+        <p id="message" class="message"></p>
+      </div>
+    </section>
+
+    <!-- Seção de Subtração -->
+    <section>
+      <h2>➖ Desafio de Subtração</h2>
+
+      <div class="step">
+        <h3>Etapa 1: Separar o segundo número</h3>
+        <div class="equation">
+          <input id="sub1" type="number" disabled />
+          <span>-</span>
+          <input id="sub2" type="number" disabled />
+          <span>=</span>
+        </div>
+        <div class="inputs">
+          <label>Repita o primeiro número:</label>
+          <input id="psub1" type="number" />
+          <label>Dezena do segundo:</label>
+          <input id="sdsub2" type="number" />
+          <label>Unidade do segundo:</label>
+          <input id="susub2" type="number" />
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Etapa 2: Subtrair partes</h3>
+        <div class="inputs">
+          <label>Subtração das dezenas:</label>
+          <input id="rsdsub2" type="number" />
+          <label>Depois subtraia as unidades:</label>
+          <input id="rsusub2" type="number" />
+        </div>
+      </div>
+
+      <div class="step">
+        <h3>Etapa 3: Resultado final</h3>
+        <div class="inputs">
+          <label>Resultado final:</label>
+          <input id="subResult" type="number" />
+          <button id="validateSub">Validar Subtração</button>
+        </div>
+        <p id="sMessage" class="message"></p>
+        <p id="subMessage" class="message"></p>
+      </div>
+    </section>
+
+    <div class="center">
+      <button id="restartBtn" class="btn-restart">🔄 Reiniciar Desafio</button>
+    </div>
+  </div>
+
+  <script src="jogo.js"></script>
+</body>
+</html>

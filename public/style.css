@@ -1,0 +1,120 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Fredoka', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fef6e4;
+  color: #333;
+}
+
+.container {
+  padding: 1rem;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #4a4e69;
+}
+
+.mode-buttons, .center {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background-color: #f7b267;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #f79d65;
+}
+
+section {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.step {
+  margin-bottom: 1.5rem;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input {
+  padding: 0.5rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.equation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.equation input {
+  max-width: 70px;
+  text-align: center;
+}
+
+.message {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.rotate-message {
+  display: none;
+  text-align: center;
+  background-color: #ffc6c6;
+  padding: 10px;
+  font-size: 1.2rem;
+  color: #900;
+}
+
+/* 📱 Responsivo para telas pequenas */
+@media (max-width: 600px) {
+  .inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .equation {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
