@@ -118,3 +118,41 @@ input {
     width: 100%;
   }
 }
+
+
+    body {
+      
+      text-align: center;
+    }
+    h1 {
+      color: #f7b267;
+  
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 500px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      font-size: 1.1rem;
+    }
+    th {
+      background-color: #f7b267;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #e2e8f0;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #f7b267;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }

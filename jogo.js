@@ -1,7 +1,7 @@
 // Configuração Supabase (substitua com a sua chave real)
 const supabaseUrl = "https://wpvntetbcdbgufxtjatj.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4SUA_SUPABASE_KEY_AQUI"; // Substitua pela sua chave anônima correta
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4"; // Substitua pela sua chave anônima correta
+const supabaseClie = supabase.createClient(supabaseUrl, supabaseKey);
 
 class ArithmeticChallenge {
     constructor() {
@@ -161,6 +161,13 @@ class ArithmeticChallenge {
             this.buttons.restartBtn.style.display = "inline";
             this.messages.message.innerText = "";
             this.messages.sMessage.innerText = "";
+            
+            salvarPontuacao("usuario_id", this.score);
+            const user = supabaseClie.auth.getUser();
+        
+            
+              salvarPontuacao(user, this.score); // 👈 Salva no Supabase!
+            
         }
     }
 
@@ -231,6 +238,21 @@ function salvarRanking(nomeJogador, pontos) {
   ranking.push({ nome: nomeJogador, pontos });
   localStorage.setItem("rankingData", JSON.stringify(ranking));
 }
+
+async function salvarPontuacao(usuario_id, pontos) {
+  const dataAtual = new Date().toISOString().split("T")[0]; // formato YYYY-MM-DD
+
+  const { data, error } = await supabaseClie
+    .from("pontuacoes")
+    .insert([{ usuario_id, pontos, data: dataAtual }]);
+
+  if (error) {
+    console.error("Erro ao salvar pontuação:", error);
+  } else {
+    console.log("Pontuação salva com sucesso:", data);
+  }
+}
+
 
 // Inicializa o jogo quando a página é carregada 
 window.onload = () => new ArithmeticChallenge();

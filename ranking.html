@@ -4,53 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ranking de Jogadores</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f1f5f9;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      color: #2563eb;
-    }
-    table {
-      margin: 0 auto;
-      border-collapse: collapse;
-      width: 90%;
-      max-width: 500px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 12px;
-      font-size: 1.1rem;
-    }
-    th {
-      background-color: #3b82f6;
-      color: white;
-    }
-    tr:nth-child(even) {
-      background-color: #e2e8f0;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
-    const supabaseUrl = 'https://wpvntetbcdbgufxtjatj.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indwdm50ZXRiY2RiZ3VmeHRqYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5NDYxMDMsImV4cCI6MjA2MzUyMjEwM30.7Zv286K4d4J5_mQ9MYRt-TeY7MukMpNYvFHG-tv3jA4';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
+<script src="ranking.js" defer></script>
 </head>
 <body>
   <h1>🏆 Ranking dos Jogadores</h1>
@@ -67,43 +24,5 @@
     </tbody>
   </table>
   <button onclick="window.location.href='index.html'">Voltar</button>
-
-  <script>
-    async function carregarRanking() {
-      const tbody = document.getElementById('ranking-body');
-      tbody.innerHTML = '<tr><td colspan="3">Carregando...</td></tr>';
-
-      try {
-        const { data, error } = await supabase
-          .from('pontuacao')
-          .select('nome, pontos')
-          .order('pontos', { ascending: false })
-          .limit(10);
-
-        if (error) throw error;
-
-        tbody.innerHTML = '';
-
-        if (data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="3">Nenhuma pontuação registrada ainda.</td></tr>';
-          return;
-        }
-
-        data.forEach((jogador, i) => {
-          const row = `<tr>
-            <td>${i + 1}º</td>
-            <td>${jogador.nome}</td>
-            <td>${jogador.pontos}</td>
-          </tr>`;
-          tbody.innerHTML += row;
-        });
-      } catch (err) {
-        console.error(err);
-        tbody.innerHTML = '<tr><td colspan="3">Erro ao carregar ranking.</td></tr>';
-      }
-    }
-
-    carregarRanking();
-  </script>
 </body>
 </html>
